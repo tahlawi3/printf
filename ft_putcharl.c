@@ -2,6 +2,10 @@
 
 int	ft_putcharl(char c)
 {
-	write(1, &c, 1);
+	int	res;
+
+	res = write(1, &c, 1);
+	if (res == -1)
+		return (-1);
 	return (1);
 }

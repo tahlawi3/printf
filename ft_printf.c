@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tahlawi3 <tahlawi3@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 09:49:12 by tahlawi3          #+#    #+#             */
+/*   Updated: 2026/10/13 10:22:56 by tahlawi3         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 int	ft_form(char c, va_list arg)
@@ -24,6 +36,25 @@ int	ft_form(char c, va_list arg)
 	return (len);
 }
 
+static int	ft_print(const char *s, int *i, va_list arg, int *len)
+{
+	int	res;
+
+	if (s[*i] == '%')
+	{
+		(*i)++;
+		if (!s[*i])
+			return (0);
+		res = ft_form(s[*i], arg);
+	}
+	else
+		res = ft_putcharl(s[*i]);
+	if (res == -1)
+		return (-1);
+	*len += res;
+	return (0);
+}
+
 int	ft_printf(const char *str, ...)
 {
 	int		i;
@@ -37,15 +68,11 @@ int	ft_printf(const char *str, ...)
 	va_start(arg, str);
 	while (str[i])
 	{
-		if (str[i] == '%')
+		if (ft_print(str, &i, arg, &len) == -1)
 		{
-			i++;
-			if (!str[i])
-				break ;
-			len += ft_form(str[i], arg);
+			va_end(arg);
+			return (-1);
 		}
-		else
-			len += ft_putcharl(str[i]);
 		i++;
 	}
 	va_end(arg);

@@ -1,24 +1,41 @@
 #include "ft_printf.h"
 
-int	ft_puthexl(unsigned long long x, char c)
+static int	ft_putbase(unsigned long long x, char c)
 {
-	int		len;
 	char	*base;
 
-	len = 0;
 	if (c == 'x')
 		base = "0123456789abcdef";
 	else
 		base = "0123456789ABCDEF";
+	if (write(1, &base[x], 1) == -1)
+		return (-1);
+	return (1);
+}
+
+int	ft_puthexl(unsigned long long x, char c)
+{
+	int		len;
+	int		res;
+
+	len = 0;
 	if (x >= 16)
 	{
-		len += ft_puthexl(x / 16, c);
-		len += ft_puthexl(x % 16, c);
+		res = ft_puthexl(x / 16, c);
+		if (res == -1)
+			return (-1);
+		len += res;
+		res = ft_puthexl(x % 16, c);
+		if (res == -1)
+			return (-1);
+		len += res;
 	}
 	else
 	{
-		write(1, &base[x], 1);
-		len++;
+		res = ft_putbase(x, c);
+		if (res == -1)
+			return (-1);
+		len += res;
 	}
 	return (len);
 }

@@ -2,29 +2,28 @@
 
 int	ft_putnbrl(int x)
 {
+	long	n;
 	int		len;
-	char	c;
 
+	n = x;
 	len = 0;
-	if (x == -2147483648)
+	if (n < 0)
 	{
-		write(1, "-2147483648", 11);
-		return (11);
+		if (write(1, "-", 1) == -1)
+			return (-1);
+		len++;
+		n *= -1;
 	}
-	if (x < 0)
+	if (n >= 10)
 	{
-		len += write (1, "-", 1);
-		x *= -1;
+		x = ft_putnbrl(n / 10);
+		if (x == -1)
+			return (-1);
+		len += x;
+		n %= 10;
 	}
-	if (x >= 10)
-	{
-		len += ft_putnbrl(x / 10);
-		len += ft_putnbrl(x % 10);
-	}
-	else
-	{
-		c = x + '0';
-		len += write(1, &c, 1);
-	}
-	return (len);
+	x = n + '0';
+	if (write(1, &x, 1) == -1)
+		return (-1);
+	return (len + 1);
 }
