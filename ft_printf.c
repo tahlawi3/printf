@@ -28,7 +28,7 @@ int	ft_form(char c, va_list arg)
 	else if (c == 'x' || c == 'X')
 		len = ft_puthexl(va_arg(arg, unsigned int), c);
 	else if (c == 'p')
-		len = ft_putptrl(va_arg(arg, unsigned long long));
+		len = ft_putptrl((unsigned long long)va_arg(arg, void *));
 	else if (c == '%')
 		len = ft_putcharl('%');
 	else
